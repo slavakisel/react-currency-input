@@ -15,6 +15,7 @@ class CurrencyInput extends Component {
         this.prepareProps = this.prepareProps.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
+        this.setSelectionRange = this.setSelectionRange.bind(this);
         this.state = this.prepareProps(this.props);
 
         this.inputSelectionStart = 1;
@@ -121,9 +122,8 @@ class CurrencyInput extends Component {
 
         let selectionEnd = Math.min(node.selectionEnd, this.theInput.value.length - this.props.suffix.length);
         let selectionStart = Math.min(node.selectionStart, selectionEnd);
-        //console.log("normal", selectionStart, selectionEnd);
-        node.setSelectionRange(selectionStart, selectionEnd);
 
+        this.setSelectionRange(node, selectionStart, selectionEnd);
     }
 
 
@@ -175,9 +175,21 @@ class CurrencyInput extends Component {
             selectionStart = selectionEnd;
         }
 
-        node.setSelectionRange(selectionStart, selectionEnd);
+        this.setSelectionRange(node, selectionStart, selectionEnd);
         this.inputSelectionStart = selectionStart;
         this.inputSelectionEnd = selectionEnd;
+    }
+
+    /**
+     * Set selection range only if input is in focused state
+     * @param node DOMElement
+     * @param start number
+     * @param end number
+     */
+    setSelectionRange(node, start, end) {
+      if (document.activeElement === node) {
+        node.setSelectionRange(start, end);
+      }
     }
 
 
